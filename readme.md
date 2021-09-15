@@ -80,5 +80,5 @@ and remove those line if you want to enable it again.
 - [vim-obsession](https://github.com/tpope/vim-obsession).
 - [vim-prosession](https://github.com/dhruvasagar/vim-prosession).
 - [vim-startify](https://github.com/mhinz/vim-startify).
-- [vim-persistence](https://github.com/folke/persistence.nvim).
+- [persistence.nvim](https://github.com/folke/persistence.nvim).
 - [tpope's vimrc](https://github.com/tpope/tpope/blob/964a173278f9ef556e76d4e778347745fba92e0b/.vimrc#L493-L496).
