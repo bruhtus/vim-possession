@@ -24,6 +24,14 @@ Use `:Possess` command to start tracking vim session. If it's already tracking v
 
 Use `:Possess!` to remove current vim session. Use `:PLoad` to load vim session according to the path, git root repo, and git branch.
 
+By default, possession remove the alternate buffer if the file doesn't exists. It's because default vim session options use the directory of the last active file and opened the file relative to these directory which usually result in vim open a file that doesn't exist as alternate buffer.
+
+To make vim use absolute path when using vim session, you can remove `curdir` option from `sessionoptions` like this:
+```vim
+set sessionoptions-=curdir
+```
+for more info, you can check `:h 'sessionoptions'`.
+
 ## Customization
 
 ### Default directory
