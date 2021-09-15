@@ -20,7 +20,7 @@ call minpac#add('bruhtus/vim-possession')
 
 ## Usage
 
-Use `:Possess` command to start tracking vim session. If the it's already tracking vim session and you use `:Possess` command again, it will pause tracking vim session. You need to enable it again by using `:Possess` again.
+Use `:Possess` command to start tracking vim session. If it's already tracking vim session and you use `:Possess` command again, it will pause tracking vim session. You need to enable it again by using `:Possess` again.
 
 Use `:Possess!` to remove current vim session. Use `:PLoad` to load vim session according to the path, git root repo, and git branch.
 
