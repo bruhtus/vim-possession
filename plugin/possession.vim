@@ -44,7 +44,7 @@ function! s:possession_load()
     let g:current_possession = v:this_session
     if bufexists(0) && !filereadable(bufname('#'))
       bw #
-    endi
+    endif
   elseif !empty(v:this_session)
     echo 'There is another session going on'
   elseif &modified
