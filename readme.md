@@ -29,6 +29,8 @@ Use `:PList` to check the available vim session. The output pattern is like this
 ~/<vim-session-for-directory>/<git-branch>
 ```
 
+> Please note that `:PList` command only list the vim session under `g:possession_dir`.
+
 By default, possession remove the alternate buffer if the file doesn't exists. It's because default vim session options use the directory of the last active file and opened the file relative to these directory which usually result in vim open a file that doesn't exist as alternate buffer.
 
 To make vim use absolute path when using vim session, you can remove `curdir` option from `sessionoptions` like this:
