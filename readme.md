@@ -22,14 +22,19 @@ call minpac#add('bruhtus/vim-possession')
 
 Use `:Possess` command to start tracking vim session. If it's already tracking vim session and you use `:Possess` command again, it will pause tracking vim session. You need to enable it again by using `:Possess` command again.
 
-Use `:Possess!` to remove current vim session. Use `:PLoad` to load vim session according to the path, git root repo, and git branch.
+Use `:Possess!` command to remove current vim session. Use `:PLoad` to load vim session according to the path, git root repo, and git branch.
 
-Use `:PList` to check the available vim session. The output pattern is like this:
+Use `:PList` command to check the available vim session. The output pattern is like this:
 ```sh
 ~/<vim-session-for-directory>/<git-branch>
 ```
 
-> Please note that `:PList` command only list the vim session under `g:possession_dir`.
+> Please note that `:PList` command only list the vim session under possession directory.
+
+Use `:PMove` command to move the current vim session file. Here's the scenario of what will `:PMove` command do:
+- If the current vim session file under possession directory, `:PMove` command will move the current vim session file to current working directory according to possession git root setting with the name `Session.vim`.
+- If the current vim session file under current working directory with the name `Session.vim`, `:PMove` command will move the current vim session file to possession directory according to possession git root and git branch setting for the file name.
+- If both `Session.vim` in current working directory and vim session file in possession directory exist, there will be a confirmation to choose whether to replace it or not. Move vim session file from current working directory to possession directory or from possession directory to current working directory.
 
 By default, possession remove the alternate buffer if the file doesn't exists. It's because default vim session options use the directory of the last active file and opened the file relative to these directory which usually result in vim open a file that doesn't exist as alternate buffer.
 

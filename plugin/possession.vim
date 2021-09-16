@@ -22,7 +22,9 @@ let g:possession_dir = get(g:, 'possession_dir',
       \ )
 
 let g:possession_git_root = !get(g:, 'possession_no_git_root') ?
-      \ fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h') :
+      \ fnamemodify(
+      \   trim(system('git rev-parse --show-toplevel 2>/dev/null')), ':p:s?\/$??'
+      \ ) :
       \ getcwd()
 
 let g:possession_git_branch = !get(g:, 'possession_no_git_branch') ?
@@ -55,15 +57,29 @@ command! -bang Possess
 command! PLoad call s:possession_load()
 
 command! PList echo join(g:possession_list, "\n")
+command! PMove
+      \ call possession#move() |
+      \ let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),
+      \   {-> substitute(v:val, '^.*[/\\]%', '\~', '')}) |
+      \ let g:possession_list = map(
+      \   map(replace_first_percentage,
+      \     {-> substitute(v:val, '^\~%%', '\~%.', '')}),
+      \   {-> substitute(v:val, '%', '\/', 'g')}
+      \   )
 
 function! s:possession_load()
-  let file = g:possession_file_pattern
-  if empty(v:this_session) && filereadable(file) && !&modified
+  let file = filereadable(g:possession_git_root . '/Session.vim') ?
+        \ g:possession_git_root . '/Session.vim' :
+        \ filereadable(g:possession_file_pattern) ?
+        \ g:possession_file_pattern : ''
+  if empty(v:this_session) && file !=# '' && !&modified
     exe 'source ' . fnameescape(file)
+    redraw
     let g:current_possession = v:this_session
     if bufexists(0) && !filereadable(bufname('#'))
       bw #
     endif
+    echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
   elseif !empty(v:this_session)
     echo 'There is another session going on'
   elseif &modified
