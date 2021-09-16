@@ -5,7 +5,7 @@
 " See :h license
 "
 " Description:
-" decoupled vim session management with git root and branch support
+" flexible vim session management with git root and branch support
 
 if exists('g:loaded_possession') || v:version < 700 || &cp
   finish
@@ -55,8 +55,8 @@ command! -bang Possess
       \   )
 
 command! PLoad call s:possession_load()
-
 command! PList echo join(g:possession_list, "\n")
+
 command! PMove
       \ call possession#move() |
       \ let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),

@@ -5,7 +5,7 @@
 " See :h license
 "
 " Description:
-" decoupled vim session management with git root and branch support
+" flexible vim session management with git root and branch support
 
 function! possession#init(bang) abort
   if !isdirectory(fnamemodify(g:possession_dir, ':p'))
