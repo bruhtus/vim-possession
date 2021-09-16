@@ -1,6 +1,8 @@
 # possession.vim
 
-Possession is a plugin to save vim session without cluttering project directory. Possession also save the file according to git root repo directory and git branch, so you can have different vim session for different git branch.
+Possession is a flexible vim session management plugin. By default, possession save the vim session file to external directory so that vim session file did not clutter your project directory. Possession can also move the current vim session file into current working directory if you want to bring your vim session file along with you.
+
+Possession save the vim session whether in external directory (which is possession directory, see [customization section](#customization) for more info) or current working directory with `Session.vim` as file name after you (purposely) exit vim. See [usage section](#usage) for more info.
 
 ## Installation
 
