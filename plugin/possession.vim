@@ -33,9 +33,19 @@ let g:possession_file_pattern = g:possession_dir . '/' . substitute(
       \ fnamemodify(g:possession_git_root, ':~:.'), '[\~\.\/]', '%', 'g'
       \ ) . (g:possession_git_branch !=# '' ? '%' . g:possession_git_branch : '')
 
+" TODO: need to simplify this
+let g:possession_replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
+let g:possession_list = map(
+      \ map(g:possession_replace_first_percentage,
+      \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
+      \ {-> substitute(v:val, '%', '\/', 'g')}
+      \ )
+
 command! -bang Possess call possession#init(<bang>0)
 
 command! PLoad call s:possession_load()
+
+command! PList echo join(g:possession_list, "\n")
 
 function! s:possession_load()
   let file = g:possession_file_pattern

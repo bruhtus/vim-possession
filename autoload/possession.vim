@@ -18,6 +18,13 @@ function! possession#init(bang) abort
     if a:bang && filereadable(session)
       echom 'Deleting session in ' . fnamemodify(session, ':~:.')
       call delete(session)
+      " TODO: need to simplify this
+      let g:possession_replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
+      let g:possession_list = map(
+      \ map(g:possession_replace_first_percentage,
+      \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
+      \ {-> substitute(v:val, '%', '\/', 'g')}
+      \ )
       if exists('g:current_possession') | unlet g:current_possession | endif
       return ''
     elseif a:bang && !filereadable(session)
