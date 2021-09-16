@@ -83,7 +83,7 @@ function! possession#move() abort
 
   elseif filereadable(l:renamed) && filereadable(g:possession_file_pattern)
     let l:choice = confirm('Session file exist, replace it?',
-          \ "&Yes\n&No")
+          \ "&Yes\n&No", 2)
     if l:choice == 1
       redraw
       let l:decide = confirm('Move from current working directory or possession directory?',
