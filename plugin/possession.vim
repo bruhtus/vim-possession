@@ -68,9 +68,9 @@ command! PMove
       \   )
 
 function! s:possession_load()
-  let file = filereadable(g:possession_git_root . '/Session.vim') ?
+  let file = filereadable(expand(g:possession_git_root . '/Session.vim')) ?
         \ g:possession_git_root . '/Session.vim' :
-        \ filereadable(g:possession_file_pattern) ?
+        \ filereadable(expand(g:possession_file_pattern)) ?
         \ g:possession_file_pattern : ''
   if empty(v:this_session) && file !=# '' && !&modified
     exe 'source ' . fnameescape(file)
