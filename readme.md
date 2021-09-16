@@ -20,9 +20,9 @@ call minpac#add('bruhtus/vim-possession')
 
 ## Usage
 
-Use `:Possess` command to start tracking vim session. If it's already tracking vim session and you use `:Possess` command again, it will pause tracking vim session. You need to enable it again by using `:Possess` command again.
+Use `:Possess` command to start tracking vim session. If it's already tracking vim session and you use `:Possess` command again, it will pause tracking vim session. You need to enable it again by using `:Possess` command again. Use `:Possess!` command to remove current vim session.
 
-Use `:Possess!` command to remove current vim session. Use `:PLoad` to load vim session according to the path, git root repo, and git branch.
+Use `:PLoad` to load vim session. By default, `:PLoad` command will load `Session.vim` file in current working directory first. If `Session.vim` file in current working directory not found, `:PLoad` command will load vim session according to the path, git root repo, and git branch.
 
 Use `:PList` command to check the available vim session. The output pattern is like this:
 ```sh
