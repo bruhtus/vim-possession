@@ -41,7 +41,14 @@ let g:possession_list = map(
       \ {-> substitute(v:val, '%', '\/', 'g')}
       \ )
 
-command! -bang Possess call possession#init(<bang>0)
+command! -bang Possess
+      \ call possession#init(<bang>0) |
+      \ let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')}) |
+      \ let g:possession_list = map(
+      \   map(replace_first_percentage,
+      \     {-> substitute(v:val, '^\~%%', '\~%.', '')}),
+      \   {-> substitute(v:val, '%', '\/', 'g')}
+      \   )
 
 command! PLoad call s:possession_load()
 
