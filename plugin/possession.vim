@@ -34,9 +34,9 @@ let g:possession_file_pattern = g:possession_dir . '/' . substitute(
       \ ) . (g:possession_git_branch !=# '' ? '%' . g:possession_git_branch : '')
 
 " TODO: need to simplify this
-let g:possession_replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
+let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
 let g:possession_list = map(
-      \ map(g:possession_replace_first_percentage,
+      \ map(replace_first_percentage,
       \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
       \ {-> substitute(v:val, '%', '\/', 'g')}
       \ )

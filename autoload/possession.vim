@@ -19,9 +19,9 @@ function! possession#init(bang) abort
       echom 'Deleting session in ' . fnamemodify(session, ':~:.')
       call delete(session)
       " TODO: need to simplify this
-      let g:possession_replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
+      let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1), {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
       let g:possession_list = map(
-      \ map(g:possession_replace_first_percentage,
+      \ map(replace_first_percentage,
       \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
       \ {-> substitute(v:val, '%', '\/', 'g')}
       \ )
