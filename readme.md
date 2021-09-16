@@ -32,9 +32,9 @@ Use `:PList` command to check the available vim session. The output pattern is l
 > Please note that `:PList` command only list the vim session under possession directory.
 
 Use `:PMove` command to move the current vim session file. Here's the scenario of what will `:PMove` command do:
-- If the current vim session file under possession directory, `:PMove` command will move the current vim session file to current working directory according to possession git root setting with the name `Session.vim`.
-- If the current vim session file under current working directory with the name `Session.vim`, `:PMove` command will move the current vim session file to possession directory according to possession git root and git branch setting for the file name.
-- If both `Session.vim` in current working directory and vim session file in possession directory exist, there will be a confirmation to choose whether to replace it or not. Move vim session file from current working directory to possession directory or from possession directory to current working directory.
+- If the current vim session file under possession directory exist and the `Session.vim` under current working directory doesn't exist, `:PMove` command will move the current vim session file to current working directory according to possession git root setting with the name `Session.vim`.
+- If the current vim session file under current working directory with the name `Session.vim` exist and the vim session file under possession directory doesn't exist, `:PMove` command will move the current vim session file to possession directory according to possession git root and git branch setting for the file name.
+- If both `Session.vim` in current working directory and vim session file in possession directory exist, there will be a confirmation dialog to choose whether to replace it or not. Move vim session file from current working directory to possession directory or from possession directory to current working directory.
 
 By default, possession remove the alternate buffer if the file doesn't exists. It's because default vim session options use the directory of the last active file and opened the file relative to these directory which usually result in vim open a file that doesn't exist as alternate buffer.
 
