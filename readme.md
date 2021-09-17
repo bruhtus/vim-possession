@@ -63,7 +63,7 @@ and remove those line if you want to use the default directory.
 
 ### Git root repo directory
 
-By default, possession use git root repo directory name as base for vim session. If you open a file from the directory that is not a git repo, then possession will use current working directory from your terminal emulator. Basically possession use the directory name where you enter vim, not the current working directory of the last opened file you.
+By default, possession use git root repo directory name as base for vim session. If you open a file from the directory that is not a git repo, then possession will use current working directory from your terminal emulator. Basically possession use the directory name where you enter vim, not the current working directory of the last opened file.
 
 > To make things simple, git root repo directory is a directory that contains `.git` directory.
 
