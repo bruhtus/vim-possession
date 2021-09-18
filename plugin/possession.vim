@@ -87,6 +87,25 @@ function! s:possession_load()
   endif
 endfunction
 
+function! possession#persist() abort
+  if exists('g:SessionLoad')
+    return ''
+  endif
+
+  if exists('g:current_possession')
+    try
+      exe 'mksession! ' . fnameescape(g:current_possession)
+    catch
+      unlet g:current_possession
+      let &l:readonly = &l:readonly
+      return 'echoerr ' . string(v:exception)
+    finally
+      let &l:readonly = &l:readonly
+    endtry
+  endif
+  return ''
+endfunction
+
 augroup possession
   autocmd!
   autocmd VimLeavePre * call possession#persist()
