@@ -83,6 +83,16 @@ let g:possession_no_git_branch = 1
 ```
 and remove those line if you want to enable it again.
 
+### Statusline integration
+
+To make possession as simple as possible, possession doesn't provide a feature to integrate with statusline. But, you can define a function for your statusline like this:
+```vim
+function! PossessionStatusline()
+  return exists('g:current_possession') ? '[S]' : '[$]'
+endfunction
+```
+it will show `[S]` if possession tracking the session and `[$]` if possession not tracking the session. And don't forget to integrate those function into your respective statusline.
+
 ## FAQ
 
 - Why vim-possession save vim session based on git branch even though I disable git root repo directory?
