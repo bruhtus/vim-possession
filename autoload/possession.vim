@@ -93,3 +93,5 @@ function! possession#move() abort
   endif
   let v:this_session = g:current_possession
 endfunction
+
+" vim:et sta sw=2 sts=-69

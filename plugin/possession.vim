@@ -110,3 +110,5 @@ augroup possession
   autocmd!
   autocmd VimLeavePre * call possession#persist()
 augroup END
+
+" vim:et sta sw=2 sts=-69
