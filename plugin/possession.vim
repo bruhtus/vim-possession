@@ -35,37 +35,19 @@ let g:possession_file_pattern = g:possession_dir . '/' . substitute(
       \ fnamemodify(g:possession_git_root, ':~:.'), '[\~\.\/]', '%', 'g'
       \ ) . (g:possession_git_branch !=# '' ? '%' . g:possession_git_branch : '')
 
-" TODO: need to simplify this
-let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),
-      \ {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
-let g:possession_list = map(
-      \ map(replace_first_percentage,
-      \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
-      \ {-> substitute(v:val, '%', '\/', 'g')}
-      \ )
+command! PLoad call s:possession_load()
 
 command! -bang Possess
       \ call possession#init(<bang>0) |
-      \ let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),
-      \   {-> substitute(v:val, '^.*[/\\]%', '\~', '')}) |
-      \ let g:possession_list = map(
-      \   map(replace_first_percentage,
-      \     {-> substitute(v:val, '^\~%%', '\~%.', '')}),
-      \   {-> substitute(v:val, '%', '\/', 'g')}
-      \   )
+      \ call possession#list()
 
-command! PLoad call s:possession_load()
-command! PList echo join(g:possession_list, "\n")
+command! PList
+      \ call possession#list() |
+      \ echo join(g:possession_list, "\n")
 
 command! PMove
       \ call possession#move() |
-      \ let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),
-      \   {-> substitute(v:val, '^.*[/\\]%', '\~', '')}) |
-      \ let g:possession_list = map(
-      \   map(replace_first_percentage,
-      \     {-> substitute(v:val, '^\~%%', '\~%.', '')}),
-      \   {-> substitute(v:val, '%', '\/', 'g')}
-      \   )
+      \ call possession#list()
 
 function! s:possession_load()
   let file = filereadable(expand(g:possession_git_root . '/Session.vim')) ?

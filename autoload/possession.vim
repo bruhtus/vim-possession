@@ -49,6 +49,18 @@ function! possession#init(bang) abort
   endtry
 endfunction
 
+" TODO: need to simplify this
+function! possession#list() abort
+  let replace_first_percentage = map(globpath(g:possession_dir, '%%*', 0, 1),
+        \ {-> substitute(v:val, '^.*[/\\]%', '\~', '')})
+
+  let g:possession_list = map(
+        \ map(replace_first_percentage,
+        \   {-> substitute(v:val, '^\~%%', '\~%.', '')}),
+        \ {-> substitute(v:val, '%', '\/', 'g')}
+        \ )
+endfunction
+
 function! possession#move() abort
   let l:renamed = g:possession_git_root . '/Session.vim'
 
