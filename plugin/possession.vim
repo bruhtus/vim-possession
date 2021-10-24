@@ -49,7 +49,7 @@ command! PMove
       \ call possession#move() |
       \ call possession#list()
 
-function! s:possession_load()
+function! s:possession_load() abort
   let file = filereadable(expand(g:possession_git_root . '/Session.vim')) ?
         \ g:possession_git_root . '/Session.vim' :
         \ filereadable(expand(g:possession_file_pattern)) ?
