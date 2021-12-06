@@ -33,7 +33,8 @@ let g:possession_git_branch = !get(g:, 'possession_no_git_branch') ?
 
 let g:possession_file_pattern = g:possession_dir . '/' . substitute(
       \ fnamemodify(g:possession_git_root, ':.'), '[\.\/]', '%', 'g'
-      \ ) . (g:possession_git_branch !=# '' ? '%' . g:possession_git_branch : '')
+      \ ) . (g:possession_git_branch !=# '' ?
+      \ '%' . substitute(g:possession_git_branch, '\/', '%', 'g') : '')
 
 command! PLoad call s:possession_load()
 
