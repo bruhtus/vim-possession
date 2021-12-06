@@ -28,7 +28,7 @@ Use `:PLoad` to load vim session. By default, `:PLoad` command will load `Sessio
 
 Use `:PList` command to check the available vim session. The output pattern is like this:
 ```sh
-~/<vim-session-for-directory>/<git-branch>
+/<vim-session-for-directory>/<git-branch>
 ```
 
 > Please note that `:PList` command only list the vim session under possession directory.
