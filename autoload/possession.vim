@@ -103,7 +103,9 @@ function! possession#move() abort
   else
     echo 'No session found for this path'
   endif
-  let v:this_session = g:current_possession
+  if exists('g:current_possession')
+    let v:this_session = g:current_possession
+  endif
 endfunction
 
 " vim:et sta sw=2 sts=-69
