@@ -30,6 +30,7 @@ Use `:PList` command to check the available vim session. The output pattern is l
 ```sh
 /<vim-session-for-directory>/<git-branch>
 ```
+use `q` to close the window after running `:PList` command.
 
 > Please note that `:PList` command only list the vim session under possession directory.
 
