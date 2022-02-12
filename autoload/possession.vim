@@ -62,13 +62,21 @@ function! possession#refresh_list() abort
         \ )
 endfunction
 
+function! s:set_options()
+  setlocal number norelativenumber
+  setlocal bufhidden=wipe buftype=nofile nobuflisted
+  setlocal foldcolumn=0 nofoldenable
+  setlocal noswapfile nomodifiable nowrap
+  setlocal colorcolumn=
+endfunction
+
 function! possession#show_list() abort
   call possession#refresh_list()
   exe 'pedit ' . g:possession_window_name
   wincmd P
   nnoremap <buffer> <silent> <nowait> q :<C-u>bw<CR>
   call setline(1, g:possession_list)
-  setlocal bufhidden=wipe buftype=nofile nobuflisted noswapfile nomodifiable
+  call s:set_options()
 endfunction
 
 function! possession#move() abort
