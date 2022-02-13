@@ -91,7 +91,7 @@ function! possession#delete_session() abort
 
   if l:choice == 1
     redraw
-    echom 'Deleting session in ' . fnamemodify(l:session_path, ':~:.')
+    echom 'Deleting session ' . expand('<cfile>')
     call remove(g:possession_list, line('.')-1)
     call delete(expand(l:session_path))
     setlocal modifiable
