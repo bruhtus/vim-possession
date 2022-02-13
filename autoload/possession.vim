@@ -83,7 +83,7 @@ function! possession#show_list() abort
 endfunction
 
 function! possession#delete_session() abort
-  let l:session_name = substitute(expand('<cfile>'), '/', '%', 'g')
+  let l:session_name = substitute(expand('<cfile>'), '[\.\/]', '%', 'g')
   let l:session_path = g:possession_dir . '/' . l:session_name
 
   let l:choice = confirm('Do you want to delete session ' . expand('<cfile>') . '?',
