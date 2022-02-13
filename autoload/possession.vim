@@ -75,6 +75,8 @@ function! possession#show_list() abort
   exe 'pedit ' . g:possession_window_name
   wincmd P
   nnoremap <buffer> <silent> <nowait> q :<C-u>bw<CR>
+  nnoremap <buffer> <silent> <nowait> d <C-d>
+  nnoremap <buffer> <silent> u <C-u>
   call setline(1, g:possession_list)
   call s:set_options()
 endfunction
