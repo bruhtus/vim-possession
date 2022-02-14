@@ -97,7 +97,9 @@ function! possession#delete_session() abort
     setlocal modifiable
     delete _
     setlocal nomodifiable
-    unlet! g:current_possession
+    if exists('g:current_possession') && expand(g:current_possession) ==# expand(l:session_path)
+      unlet! g:current_possession
+    endif
 
   elseif l:choice == 2
     redraw
