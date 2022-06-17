@@ -74,12 +74,13 @@ function! possession#show_list() abort
   call possession#refresh_list()
   exe 'pedit ' . g:possession_window_name
   wincmd P
-  nnoremap <buffer> <silent> <nowait> q :<C-u>bw<CR>
+  nnoremap <buffer> <silent> <nowait> q :<C-u>bw <Bar> wincmd p<CR>
   nnoremap <buffer> <silent> <nowait> d <C-d>
   nnoremap <buffer> <silent> u <C-u>
   nnoremap <buffer> <silent> D :<C-u>call possession#delete_session()<CR>
   call setline(1, g:possession_list)
   call s:set_options()
+  wincmd J
 endfunction
 
 function! possession#delete_session() abort
