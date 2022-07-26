@@ -80,7 +80,9 @@ function! possession#msg_truncation(msg) abort
 endfunction
 
 function! s:possession_load() abort
-  let file = filereadable(expand(g:possession_git_root . '/Session.vim')) ?
+  let file = filereadable(getcwd() . '/Session.vim') ?
+        \ getcwd() . '/Session.vim' :
+        \ filereadable(expand(g:possession_git_root . '/Session.vim')) ?
         \ g:possession_git_root . '/Session.vim' :
         \ filereadable(expand(g:possession_file_pattern)) ?
         \ g:possession_file_pattern : ''
