@@ -87,14 +87,13 @@ function! s:possession_load() abort
         \ filereadable(expand(g:possession_file_pattern)) ?
         \ g:possession_file_pattern : ''
   if empty(v:this_session) && file !=# '' && !&modified
-    exe 'source ' . fnameescape(file)
-    " Note: remove the echo of file name at startup, vim change the shortmess option
-    " when using session temporary
-    redraw
+    exe 'silent source ' . fnameescape(file)
     let g:current_possession = v:this_session
     if bufexists(0) && !filereadable(bufname('#'))
       bw #
     endif
+    " Note: make sure that the echo message appear
+    redraw
     echom 'Loading session in '
           \ . possession#msg_truncation(fnamemodify(g:current_possession, ':~:.'))
   elseif !empty(v:this_session)
