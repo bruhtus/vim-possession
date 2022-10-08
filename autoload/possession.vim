@@ -12,35 +12,35 @@ function! possession#init(bang) abort
     call mkdir(fnamemodify(g:possession_dir, ':p'), 'p')
   endif
 
-  let session = get(g:, 'current_possession', v:this_session)
+  let l:session = get(g:, 'current_possession', v:this_session)
 
   try
-    if a:bang && filereadable(expand(session))
+    if a:bang && filereadable(expand(l:session))
       echom 'Deleting session in '
-            \ . possession#msg_truncation(fnamemodify(session, ':~:.'))
-      call delete(expand(session))
+            \ . PossessionMsgTruncation(fnamemodify(l:session, ':~:.'))
+      call delete(expand(l:session))
       unlet! g:current_possession
       return ''
-    elseif a:bang && !filereadable(expand(session))
+    elseif a:bang && !filereadable(expand(l:session))
       echo 'Session for this path not found, nothing deleted'
       return ''
     elseif exists('g:current_possession')
       echom 'Pausing session in '
-            \ . possession#msg_truncation(fnamemodify(session, ':~:.'))
+            \ . PossessionMsgTruncation(fnamemodify(l:session, ':~:.'))
       unlet g:current_possession
       return ''
-    elseif !empty(session)
-      let file = session
+    elseif !empty(l:session)
+      let file = l:session
     else
       let file = g:possession_file_pattern
     endif
 
     let g:current_possession = file
 
-    let error = possession#persist()
+    let error = PossessionPersist()
     if empty(error)
       echom 'Tracking session in '
-            \ . possession#msg_truncation(fnamemodify(file, ':~:.'))
+            \ . PossessionMsgTruncation(fnamemodify(file, ':~:.'))
       let v:this_session = file
       return ''
     else
@@ -94,7 +94,7 @@ function! possession#delete_session() abort
 
   if l:choice == 1
     redraw
-    echom 'Deleting session ' . expand('<cfile>')
+    echom 'Deleting session ' . PossessionMsgTruncation(expand('<cfile>'))
     call remove(g:possession_list, line('.')-1)
     call delete(expand(l:session_path))
     setlocal modifiable

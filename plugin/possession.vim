@@ -55,7 +55,7 @@ command! PMove
       \ call possession#refresh_list()
 
 " Ref: vim-lsp/autoload/lsp/utils.vim (lsp#utils#echo_with_truncation())
-function! possession#msg_truncation(msg) abort
+function! PossessionMsgTruncation(msg) abort
   let l:msg = a:msg
 
   if &laststatus == 0 || (&laststatus == 1 && winnr('$') == 1)
@@ -80,7 +80,7 @@ function! possession#msg_truncation(msg) abort
 endfunction
 
 function! s:possession_load() abort
-  let file = filereadable(getcwd() . '/Session.vim') ?
+  let file = filereadable(expand(getcwd() . '/Session.vim')) ?
         \ getcwd() . '/Session.vim' :
         \ filereadable(expand(g:possession_git_root . '/Session.vim')) ?
         \ g:possession_git_root . '/Session.vim' :
@@ -95,7 +95,7 @@ function! s:possession_load() abort
     " Note: make sure that the echo message appear
     redraw
     echom 'Loading session in '
-          \ . possession#msg_truncation(fnamemodify(g:current_possession, ':~:.'))
+          \ . PossessionMsgTruncation(fnamemodify(g:current_possession, ':~:.'))
   elseif !empty(v:this_session)
     echo 'There is another session going on'
   elseif &modified
@@ -103,7 +103,7 @@ function! s:possession_load() abort
   endif
 endfunction
 
-function! possession#persist() abort
+function! PossessionPersist() abort
   " Note: more info :h SessionLoad-variable
   " Note: can also be used to not save the session
   if exists('g:SessionLoad')
@@ -126,7 +126,7 @@ endfunction
 
 augroup possession
   autocmd!
-  autocmd VimLeavePre * call possession#persist()
+  autocmd VimLeavePre * call PossessionPersist()
 augroup END
 
 " vim:et sta sw=2 sts=-69
