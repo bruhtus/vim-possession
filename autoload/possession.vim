@@ -111,19 +111,30 @@ function! possession#delete_session() abort
 endfunction
 
 function! possession#move() abort
-  let renamed = g:possession_git_root . '/Session.vim'
+  let renamed = PossessionGitRoot() . '/Session.vim'
 
-  if !filereadable(expand(renamed)) && filereadable(expand(g:possession_file_pattern))
-    call rename(expand(g:possession_file_pattern), expand(renamed))
+  " Note: from session file in possession dir to Session.vim in current dir.
+  if !filereadable(expand(renamed)) && filereadable(expand(PossessionFilePattern()))
+    call rename(expand(PossessionFilePattern()), expand(renamed))
     let g:current_possession = renamed
     echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
 
-  elseif filereadable(expand(renamed)) && !filereadable(expand(g:possession_file_pattern))
-    call rename(expand(renamed), expand(g:possession_file_pattern))
+ " Note: from Session.vim in current dir to session file in possession dir.
+  elseif filereadable(expand(renamed)) && !filereadable(expand(PossessionFilePattern()))
+    call rename(expand(renamed), expand(PossessionFilePattern()))
     let g:current_possession = g:possession_file_pattern
     echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
 
-  elseif filereadable(expand(renamed)) && filereadable(expand(g:possession_file_pattern))
+  " Note:
+  " from current possession filename in possession dir to current file
+  " pattern.
+  " useful if we want to change git branch or git root on the go.
+  elseif !filereadable(PossessionFilePattern()) && filereadable(expand(g:current_possession))
+    call rename(expand(g:current_possession), expand(PossessionFilePattern()))
+    let g:current_possession = PossessionFilePattern()
+    echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
+
+  elseif filereadable(expand(renamed)) && filereadable(expand(PossessionFilePattern()))
     let choice = confirm('Session file exist, replace it?',
           \ "&Yes\n&No", 2)
     if choice == 1
@@ -132,12 +143,12 @@ function! possession#move() abort
             \ "&Current working directory\n&Possession directory\n&Quit", 3)
       if decide == 1
         redraw
-        call rename(expand(renamed), expand(g:possession_file_pattern))
-        let g:current_possession = g:possession_file_pattern
+        call rename(expand(renamed), expand(PossessionFilePattern()))
+        let g:current_possession = PossessionFilePattern()
         echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
       elseif decide == 2
         redraw
-        call rename(expand(g:possession_file_pattern), expand(renamed))
+        call rename(expand(PossessionFilePattern()), expand(renamed))
         let g:current_possession = renamed
         echom 'Tracking session in ' . fnamemodify(g:current_possession, ':~:.')
       elseif decide == 3

@@ -24,22 +24,97 @@ let g:possession_dir = get(g:, 'possession_dir',
       \ '~/.vim/session'
       \ )
 
-" Note: remove the last slice in directory path
-let g:possession_git_root = !get(g:, 'possession_no_git_root') ?
-      \ fnamemodify(
-      \   trim(system('git rev-parse --show-toplevel 2>/dev/null')), ':p:s?\/$??'
-      \ ) :
-      \ getcwd()
+" Ref:
+" https://github.com/itchyny/vim-gitbranch/blob/1a8ba866f3eaf0194783b9f8573339d6ede8f1ed/autoload/gitbranch.vim#L11-L24
+function! GitBranch() abort
+  if get(b:, 'gitbranch_pwd', '') !=# expand('%:p:h') || !has_key(b:, 'gitbranch_path')
+    call s:gitbranch_detect(expand('%:p:h'))
+  endif
+  if has_key(b:, 'gitbranch_path') && filereadable(b:gitbranch_path)
+    let branch = get(readfile(b:gitbranch_path), 0, '')
+    if branch =~# '^ref: '
+      return substitute(branch, '^ref: \%(refs/\%(heads/\|remotes/\|tags/\)\=\)\=', '', '')
+    elseif branch =~# '^\x\{20\}'
+      return branch[:6]
+    endif
+  endif
+  return ''
+endfunction
 
-let g:possession_git_branch = !get(g:, 'possession_no_git_branch') ?
-      \ trim(system("git branch --show-current 2>/dev/null")) :
-      \ ''
+" Ref:
+" https://github.com/itchyny/vim-gitbranch/blob/1a8ba866f3eaf0194783b9f8573339d6ede8f1ed/autoload/gitbranch.vim#L26-L47
+function! GitDir(path) abort
+  let path = a:path
+  let prev = ''
+  let git_modules = path =~# '/\.git/modules/'
+  while path !=# prev
+    let dir = path . '/.git'
+    let type = getftype(dir)
+    if type ==# 'dir' && isdirectory(dir.'/objects') && isdirectory(dir.'/refs') && getfsize(dir.'/HEAD') > 10
+      return dir
+    elseif type ==# 'file'
+      let reldir = get(readfile(dir), 0, '')
+      if reldir =~# '^gitdir: '
+        return simplify(reldir[8:])
+      endif
+    elseif git_modules && isdirectory(path.'/objects') && isdirectory(path.'/refs') && getfsize(path.'/HEAD') > 10
+      return path
+    endif
+    let prev = path
+    let path = fnamemodify(path, ':h')
+  endwhile
+  return ''
+endfunction
 
-" Note: change `~`, `.`, and `/` in directory to `%`
-let g:possession_file_pattern = g:possession_dir . '/' . substitute(
-      \ fnamemodify(g:possession_git_root, ':.'), '[\.\/]', '%', 'g'
-      \ ) . (g:possession_git_branch !=# '' ?
-      \ '%' . substitute(g:possession_git_branch, '\/', '%', 'g') : '')
+" Ref:
+" https://github.com/itchyny/vim-gitbranch/blob/1a8ba866f3eaf0194783b9f8573339d6ede8f1ed/autoload/gitbranch.vim#L49-L59
+function! s:gitbranch_detect(path) abort
+  unlet! b:gitbranch_path
+  let b:gitbranch_pwd = expand('%:p:h')
+  let dir = GitDir(a:path)
+  if dir !=# ''
+    let path = dir . '/HEAD'
+    if filereadable(path)
+      let b:gitbranch_path = path
+    endif
+  endif
+endfunction
+
+function! PossessionGitRoot() abort
+  if !get(g:, 'possession_no_git_root')
+    let l:dir = GitDir(getcwd())
+    return !empty(l:dir) ?
+          \ fnamemodify(l:dir, ':h') :
+          \ getcwd()
+  endif
+
+  return getcwd()
+endfunction
+
+function! PossessionGitBranch() abort
+  if !get(g:, 'possession_no_git_branch')
+    return GitBranch()
+  endif
+
+  return ''
+endfunction
+
+function! PossessionFilePattern(...) abort
+  let l:dir = get(a:000, 0)
+  let l:branch = get(a:000, 1)
+
+  if !empty(l:dir)
+    return g:possession_dir . '/' . substitute(
+          \ fnamemodify(l:dir, ':.'), '[\.\/]', '%', 'g'
+          \ ) . (l:branch !=# '' ?
+          \ '%' . substitute(l:branch, '\/', '%', 'g') : '')
+  endif
+
+  return g:possession_dir . '/' . substitute(
+      \ fnamemodify(PossessionGitRoot(), ':.'), '[\.\/]', '%', 'g'
+      \ ) . (PossessionGitBranch() !=# '' ?
+      \ '%' . substitute(PossessionGitBranch(), '\/', '%', 'g') : '')
+endfunction
 
 command! PLoad call s:possession_load()
 
@@ -80,12 +155,18 @@ function! PossessionMsgTruncation(msg) abort
 endfunction
 
 function! s:possession_load() abort
-  let file = filereadable(expand(getcwd() . '/Session.vim')) ?
-        \ getcwd() . '/Session.vim' :
-        \ filereadable(expand(g:possession_git_root . '/Session.vim')) ?
-        \ g:possession_git_root . '/Session.vim' :
-        \ filereadable(expand(g:possession_file_pattern)) ?
-        \ g:possession_file_pattern : ''
+  if filereadable(expand(getcwd() . '/Session.vim'))
+    let file = getcwd() . '/Session.vim'
+  elseif filereadable(expand(PossessionFilePattern(getcwd(), PossessionGitBranch())))
+    let file = PossessionFilePattern(getcwd(), PossessionGitBranch())
+  elseif filereadable(expand(PossessionGitRoot() . '/Session.vim'))
+    let file = PossessionGitRoot() . '/Session.vim'
+  elseif filereadable(expand(PossessionFilePattern()))
+    let file = PossessionFilePattern()
+  else
+    let file = ''
+  endif
+
   if empty(v:this_session) && file !=# '' && !&modified
     exe 'silent source ' . fnameescape(file)
     let g:current_possession = v:this_session
