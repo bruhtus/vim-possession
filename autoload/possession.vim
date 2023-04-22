@@ -71,6 +71,7 @@ function! s:set_options()
   setlocal foldcolumn=0 nofoldenable
   setlocal noswapfile nomodifiable nowrap
   setlocal colorcolumn=
+  let &l:statusline = 'Total: ' . len(g:possession_list) . ' session(s)'
 endfunction
 
 function! possession#show_list() abort
