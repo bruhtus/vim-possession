@@ -54,7 +54,7 @@ endfunction
 
 " TODO: need to simplify this
 " Note: change back the `%` to its respective symbol
-function! possession#refresh_list() abort
+function! possession#update_list() abort
   let replace_first_percentage = map(globpath(g:possession_dir, '%*', 0, 1),
         \ {-> substitute(v:val, '^.*[/\\]%', '\/', '')})
 
@@ -75,7 +75,7 @@ function! s:set_options()
 endfunction
 
 function! possession#show_list() abort
-  call possession#refresh_list()
+  call possession#update_list()
   exe 'botright pedit ' . g:possession_window_name
   wincmd P
   nnoremap <buffer> <silent> <nowait> q :<C-u>bw <Bar> wincmd p<CR>
