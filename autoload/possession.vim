@@ -65,13 +65,13 @@ function! possession#update_list() abort
         \ )
 endfunction
 
-function! s:set_options()
+function! s:set_options() abort
   setlocal number norelativenumber
   setlocal bufhidden=wipe buftype=nofile nobuflisted
   setlocal foldcolumn=0 nofoldenable
   setlocal noswapfile nomodifiable nowrap
   setlocal colorcolumn=
-  let &l:statusline = 'Total: ' . len(g:possession_list) . ' session(s)'
+  let &l:statusline = "%{'Total: ' . len(g:possession_list) . ' session(s)'}"
 endfunction
 
 function! possession#show_list() abort
